@@ -14,10 +14,10 @@ export default defineConfig({
       {
         text: 'Links',
         items: [
-          { text: 'npm package', link: 'https://www.npmjs.com/package/inertia-hotwire-native' },
-          { text: 'Web demo', link: 'https://github.com/zumkorn/inertia-native-demo' },
-          { text: 'iOS demo', link: 'https://github.com/zumkorn/inertia-native-ios-demo' },
-          { text: 'Android demo', link: 'https://github.com/zumkorn/inertia-native-android-demo' },
+          { text: 'npm package', link: 'https://www.npmjs.com/package/inertia-native' },
+          { text: 'Web demo', link: 'https://github.com/inertia-native/demo-rails' },
+          { text: 'iOS demo', link: 'https://github.com/inertia-native/demo-ios' },
+          { text: 'Android demo', link: 'https://github.com/inertia-native/demo-android' },
         ],
       },
     ],
@@ -53,11 +53,11 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/zumkorn/inertia-hotwire-native' },
+      { icon: 'github', link: 'https://github.com/inertia-native/inertia-native' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/zumkorn/inertia-native-docs/edit/main/docs/:path',
+      pattern: 'https://github.com/inertia-native/docs/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
 

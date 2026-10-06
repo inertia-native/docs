@@ -16,7 +16,7 @@ by the web page below it.*
 There is nothing to install. The files below are the complete component — paste
 the web one plus whichever platforms you ship into your app, and change them
 however you like. They are shown straight from the
-[hotwire-bridge-components](https://github.com/zumkorn/hotwire-bridge-components/tree/main/registry/button)
+[bridge-components](https://github.com/inertia-native/bridge-components/tree/main/registry/button)
 registry, so what you see here is what the registry holds.
 :::
 

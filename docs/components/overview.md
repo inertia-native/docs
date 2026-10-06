@@ -20,7 +20,7 @@ regular browser.
 The React entry exposes one generic primitive:
 
 ```js
-import { useBridgeComponent } from 'inertia-hotwire-native/react'
+import { useBridgeComponent } from 'inertia-native/react'
 ```
 
 It returns whether the connected native app supports a component and a stable
@@ -67,7 +67,7 @@ subsequent interaction is reported twice.
 ## Ready-made components
 
 Rather than writing each component from scratch, you can copy one from the
-[hotwire-bridge-components](https://github.com/zumkorn/hotwire-bridge-components)
+[bridge-components](https://github.com/inertia-native/bridge-components)
 registry. It ships both halves — the web component and its Swift counterpart —
 along with a contract describing the messages they exchange.
 
@@ -82,7 +82,7 @@ Inertia form looks like this:
 ```js
 // hooks/useBridgeForm.js
 import { useEffect, useRef } from 'react'
-import { useBridgeComponent } from 'inertia-hotwire-native/react'
+import { useBridgeComponent } from 'inertia-native/react'
 
 export function useBridgeForm({ submitTitle, processing, onSubmit }) {
   const { supported, send } = useBridgeComponent('form')
