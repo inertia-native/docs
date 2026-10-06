@@ -5,13 +5,13 @@ Published under the `beta` tag while the API stabilizes. Install with `@beta`.
 :::
 
 ```bash
-npm add inertia-hotwire-native@beta
+npm add inertia-native@beta
 ```
 
 ## Requirements
 
 - `@inertiajs/core` >= 2.0 (works with the v3 line)
-- `react` >= 18 — only for the `inertia-hotwire-native/react` entry
+- `react` >= 18 — only for the `inertia-native/react` entry
 
 ## Setup
 
@@ -20,7 +20,7 @@ entrypoint:
 
 ```js
 import { createInertiaApp } from '@inertiajs/react'
-import { initHotwireNative } from 'inertia-hotwire-native'
+import { initHotwireNative } from 'inertia-native'
 
 const isHotwireNative = !!window.webkit?.messageHandlers?.turbo
 initHotwireNative({ debug: import.meta.env.DEV || isHotwireNative })

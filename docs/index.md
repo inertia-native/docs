@@ -14,7 +14,7 @@ hero:
       link: /guide/installation
     - theme: alt
       text: GitHub
-      link: https://github.com/zumkorn/inertia-hotwire-native
+      link: https://github.com/inertia-native/inertia-native
 
 features:
   - title: Native navigation

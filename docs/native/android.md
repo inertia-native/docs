@@ -7,7 +7,7 @@ any bridge components.
 
 ::: tip Reference app
 A runnable example lives in
-[inertia-native-android-demo](https://github.com/zumkorn/inertia-native-android-demo).
+[demo-android](https://github.com/inertia-native/demo-android).
 Clone it to see a working setup end to end.
 :::
 

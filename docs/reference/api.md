@@ -3,7 +3,7 @@
 ## `initHotwireNative`
 
 ```ts
-import { initHotwireNative } from 'inertia-hotwire-native'
+import { initHotwireNative } from 'inertia-native'
 
 initHotwireNative(options?: { debug?: boolean }): void
 ```
@@ -22,7 +22,7 @@ is a no-op.
 ## `useBridgeComponent`
 
 ```ts
-import { useBridgeComponent } from 'inertia-hotwire-native/react'
+import { useBridgeComponent } from 'inertia-native/react'
 
 useBridgeComponent(component: string): {
   supported: boolean

@@ -1,6 +1,6 @@
 # Introduction
 
-[`inertia-hotwire-native`](https://www.npmjs.com/package/inertia-hotwire-native)
+[`inertia-native`](https://www.npmjs.com/package/inertia-native)
 lets an [Inertia.js](https://inertiajs.com) application run inside
 [Hotwire Native](https://native.hotwired.dev) (iOS & Android) and behave like a
 native app.
@@ -24,18 +24,18 @@ navigates exactly as usual.
 
 ## Two entry points
 
-- **Framework-agnostic core** (`inertia-hotwire-native`) — peer-depends on
+- **Framework-agnostic core** (`inertia-native`) — peer-depends on
   `@inertiajs/core`. Handles all navigation.
-- **React bindings** (`inertia-hotwire-native/react`) — optional, peer-depends
+- **React bindings** (`inertia-native/react`) — optional, peer-depends
   on `react`. Provides `useBridgeComponent` for bridge components.
 
 ## The ecosystem
 
 | Repository | What it is |
 | --- | --- |
-| [inertia-hotwire-native](https://github.com/zumkorn/inertia-hotwire-native) | The npm package |
-| [inertia-native-demo](https://github.com/zumkorn/inertia-native-demo) | Web / Rails demo app |
-| [inertia-native-ios-demo](https://github.com/zumkorn/inertia-native-ios-demo) | iOS Hotwire Native shell |
-| [inertia-native-android-demo](https://github.com/zumkorn/inertia-native-android-demo) | Android Hotwire Native shell |
+| [inertia-native](https://github.com/inertia-native/inertia-native) | The npm package |
+| [demo-rails](https://github.com/inertia-native/demo-rails) | Web / Rails demo app |
+| [demo-ios](https://github.com/inertia-native/demo-ios) | iOS Hotwire Native shell |
+| [demo-android](https://github.com/inertia-native/demo-android) | Android Hotwire Native shell |
 
 Next: [Installation](/guide/installation).

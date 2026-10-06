@@ -7,7 +7,7 @@ bridge components.
 
 ::: tip Reference app
 A runnable example lives in
-[inertia-native-ios-demo](https://github.com/zumkorn/inertia-native-ios-demo).
+[demo-ios](https://github.com/inertia-native/demo-ios).
 Clone it to see a working setup end to end.
 :::
 
@@ -34,7 +34,7 @@ Hotwire.registerBridgeComponents([
 ```
 
 Ready-made components — Swift source plus the matching web half — live in the
-[hotwire-bridge-components](https://github.com/zumkorn/hotwire-bridge-components)
+[bridge-components](https://github.com/inertia-native/bridge-components)
 registry. See [Button](/components/button) for a worked example, including the
 minimum SDK version they require.
 
