@@ -17,7 +17,8 @@ regular browser.
 
 ## `useBridgeComponent`
 
-The React entry exposes one generic primitive:
+Each framework entry exposes one generic primitive — the examples below use
+React; Vue and Svelte have the same shape (see the [API](/reference/api#usebridgecomponent)):
 
 ```js
 import { useBridgeComponent } from 'inertia-native/react'
@@ -63,6 +64,26 @@ useEffect(() => {
 
 Without the cleanup, a changed prop leaves the old callback registered and every
 subsequent interaction is reported twice.
+
+## Restoring after a native screen
+
+On Android, coming back to a web screen from a native one dispatches
+`native:restore`, and native may have dropped the UI a component drew on
+`connect`. `useBridgeComponent` exposes this as `restored`, a counter. Put it
+in the deps of the effect that sends `connect`, so it is sent again:
+
+```js
+const { supported, send, restored } = useBridgeComponent('button')
+
+useEffect(() => {
+  if (!supported) return
+  const id = send('connect', { title }, () => onTapRef.current?.())
+  return () => window.HotwireNative?.web?.removeCallback(id)
+}, [supported, title, send, restored])
+```
+
+Nothing is resent automatically: a component that only sends when called (like
+`alert`) must not fire again.
 
 ## Ready-made components
 

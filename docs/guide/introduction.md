@@ -5,10 +5,9 @@ lets an [Inertia.js](https://inertiajs.com) application run inside
 [Hotwire Native](https://native.hotwired.dev) (iOS & Android) and behave like a
 native app.
 
-::: warning Beta & unofficial
-This is a pre-1.0, community-built integration. It is **not** an official
-Inertia.js or Hotwire project, and the API may still change between beta
-releases.
+::: info Unofficial
+This is a community-built integration. It is **not** an official Inertia.js or
+Hotwire project.
 :::
 
 ## How it works
@@ -22,12 +21,15 @@ bridge components (submit buttons, menus, etc.).
 In a regular browser it stays inert: with no native adapter connected, Inertia
 navigates exactly as usual.
 
-## Two entry points
+## Entry points
 
 - **Framework-agnostic core** (`inertia-native`) — peer-depends on
   `@inertiajs/core`. Handles all navigation.
-- **React bindings** (`inertia-native/react`) — optional, peer-depends
-  on `react`. Provides `useBridgeComponent` for bridge components.
+- **Bridge component bindings** — optional, each peer-depends on its framework
+  and provides `useBridgeComponent`:
+  - `inertia-native/react`
+  - `inertia-native/vue`
+  - `inertia-native/svelte`
 
 ## The ecosystem
 
