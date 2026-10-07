@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'Inertia × Hotwire Native',
+  title: 'Inertia Native',
   description:
-    'Drive Inertia.js navigation and bridge components from Hotwire Native (iOS & Android).',
+    'Native screens and bridge components for Inertia.js apps on iOS & Android.',
   cleanUrls: true,
   lastUpdated: true,
 
