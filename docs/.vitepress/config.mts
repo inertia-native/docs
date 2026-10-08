@@ -10,6 +10,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
+      { text: 'Quick start', link: '/guide/quick-start' },
       { text: 'API', link: '/reference/api' },
       {
         text: 'Links',
@@ -27,8 +28,11 @@ export default defineConfig({
         text: 'Guide',
         items: [
           { text: 'Introduction', link: '/guide/introduction' },
-          { text: 'Installation', link: '/guide/installation' },
+          { text: 'Quick start', link: '/guide/quick-start' },
+          { text: 'How it works', link: '/guide/how-it-works' },
+          { text: 'Feel native', link: '/guide/feel-native' },
           { text: 'Navigation', link: '/guide/navigation' },
+          { text: 'Manual installation', link: '/guide/installation' },
         ],
       },
       {
@@ -49,6 +53,10 @@ export default defineConfig({
       {
         text: 'Reference',
         items: [{ text: 'API', link: '/reference/api' }],
+      },
+      {
+        text: 'Help',
+        items: [{ text: 'FAQ', link: '/guide/faq' }],
       },
     ],
 
