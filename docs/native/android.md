@@ -35,7 +35,7 @@ android/
 │       │   │   │                       configuration, bridge components
 │       │   │   ├── MainActivity.kt     opens your URL on launch
 │       │   │   ├── WebFragment.kt      the screen that shows a web page
-│       │   │   ├── Urls.kt             the URL, adjusted for the emulator
+│       │   │   ├── Urls.kt             the URL the app starts at
 │       │   │   └── bridge/             native halves of the alert, button,
 │       │   │                           form, menu, and overflow-menu components
 │       │   └── res/values/strings.xml  app name
@@ -52,6 +52,10 @@ don't need to rename the package.
 
 `WebFragment.kt` adds a spinner to the toolbar while a form submits.
 
+`Urls.kt` adds a trailing `/` to a URL without a path, so the app starts at
+`http://localhost:8000/`. That's the form the web view reports, and starting
+there avoids an extra redirect on launch.
+
 ## Run on the emulator
 
 Run this from your app's root, with your dev server running:
@@ -60,89 +64,106 @@ Run this from your app's root, with your dev server running:
 npm run android
 ```
 
-It builds and installs a debug build with Gradle, starts your first emulator
-if none is running, waits for it to boot, and launches your app. It warns you
-if your dev server doesn't answer.
+It uses the device that's already connected, or starts your first emulator
+and waits for it to boot. Then it builds and installs a debug build with
+Gradle, forwards your dev server's ports to the device, and launches your app.
+It warns you if your dev server doesn't answer.
 
-To pick an emulator, pass its name after `--`:
+Pass options after `--`:
 
 ```bash
 npm run android -- --avd Pixel_9
 ```
 
-`emulator -list-avds` prints the names you can use. The `emulator` tool is in
-the Android SDK's `emulator` directory.
+| Option | What it does |
+| --- | --- |
+| `--avd <name>` | The emulator to use, started if needed. `emulator -list-avds` prints the names. The `emulator` tool is in the Android SDK's `emulator` directory. |
+| `--device <serial>` | A connected device to use, by the serial that `adb devices` prints. Use it when more than one device is connected. |
+
+### How the device reaches your computer
+
+Inside the emulator, `localhost` is the emulator itself, and the app loads your
+URL as it is. `npm run android` fixes this with `adb reverse`, which forwards a
+port on the device to the same port on your computer. It forwards your app's
+port and the Vite dev server's port:
+
+```text
+✓ adb reverse tcp:8000, tcp:5173 (localhost on emulator-5554 reaches this machine)
+```
+
+After that, `http://localhost:8000` in the app reaches your dev server, and so
+do the scripts that Vite serves at `http://127.0.0.1:5173`. The forward lasts
+until the emulator shuts down.
+
+Vite must listen on `127.0.0.1` for this to work, not on the IPv6 address
+`[::1]`. [Quick start](/guide/quick-start#_2-start-your-dev-server) shows the
+one-line Vite config change. `npm run android` warns you when it's missing.
+
+Android blocks plain HTTP by default. In debug builds,
+`network_security_config.xml` allows it for `localhost`, `127.0.0.1`, and
+`10.0.2.2` only. Release builds keep Android's default and need HTTPS.
+
+### Run from Android Studio
 
 You can also run from Android Studio. Open the `android/` directory, wait for
 Gradle to finish syncing, choose an emulator in the toolbar, and press
 **Run**.
 
-### How the emulator reaches your computer
-
-Inside the emulator, `localhost` is the emulator itself. Your computer is
-`10.0.2.2`. In debug builds, `Urls.kt` rewrites a `localhost` or `127.0.0.1`
-URL to `10.0.2.2`, so `http://localhost:8000` works without changes.
-
-Android blocks plain HTTP by default. In debug builds,
-`network_security_config.xml` allows it for `10.0.2.2`, `localhost`, and
-`127.0.0.1` only. Release builds keep Android's default and need HTTPS.
-
-### Blank screen on the emulator
-
-If the app opens but the page stays blank or unstyled, the page's scripts and
-styles probably didn't load. The app rewrites your URL, but it can't rewrite
-the addresses inside your page. A layout that loads scripts from the Vite dev
-server at a `localhost` address points the emulator at itself. Laravel works
-this way: its pages load scripts from the address in `public/hot`, such as
-`http://[::1]:5173`.
-
-To check, open `chrome://inspect` in Chrome on your computer, find the app's
-web view, and look for failed script requests. Debug builds make the web view
-inspectable.
-
-The reliable fix is to run your app without the Vite dev server, so the
-scripts come from your app's own address:
+Android Studio doesn't forward ports. Once per emulator boot, either run
+`npm run android`, or forward the ports yourself with `adb`, which is in the
+Android SDK's `platform-tools` directory:
 
 ::: code-group
 
 ```bash [Laravel]
-npm run build
-php artisan serve
+adb reverse tcp:8000 tcp:8000
+adb reverse tcp:5173 tcp:5173
 ```
 
 ```bash [Rails]
-# Rails builds the assets when the Vite dev server isn't running.
-bin/rails server
+adb reverse tcp:3000 tcp:3000
+adb reverse tcp:5173 tcp:5173
 ```
 
 :::
 
-You lose hot reload while you test this way. Run `npm run dev` again when you
-go back to the browser.
+If your Rails app uses `vite_rails`, its dev server port is in
+`config/vite.json`, and it's `3036` by default.
 
-<!-- TODO: verify the Laravel + emulator + Vite dev server case end to end, and document a setup that keeps hot reload (for example `adb reverse tcp:5173 tcp:5173`, which only helps if the hot file uses localhost or 127.0.0.1, not [::1]) -->
+### "Error loading page" on the emulator
+
+The app shows this screen when your page doesn't load. Check these, in order:
+
+1. Your dev server is running, and the URL works in your browser.
+2. The ports are forwarded. Run `npm run android` again, or the `adb reverse`
+   commands above.
+3. Vite listens on `127.0.0.1`. If `npm run android` printed a warning about
+   `[::1]`, add the line it shows to your Vite config and restart the dev
+   server.
+
+To look closer, open `chrome://inspect` in Chrome on your computer, find the
+app's web view, and check its console and network requests. Debug builds make
+the web view inspectable.
 
 ## Run on your phone
 
-Connect your phone over USB, then make it reach your computer either over
-Wi-Fi or through the USB cable. Start by turning on USB debugging:
+A phone connected over USB works like the emulator, including the port
+forwarding. Turn on USB debugging first:
 
 1. On the phone, open **Settings** > **About phone** and tap **Build number**
    seven times. This turns on **Developer options**.
 2. In **Developer options**, turn on **USB debugging**.
 3. Connect the phone with a cable and accept the prompt on the phone.
 
-With the phone connected, `npm run android` installs the app on it instead of
-starting an emulator. You can also choose the phone in Android Studio's
-toolbar and press **Run**.
+Then run `npm run android`. It installs the app on the phone and forwards the
+ports, so `localhost` works without changes. If an emulator is running too,
+pick the phone with `--device` and the serial from `adb devices`. Unplugging
+the phone ends the forward, so run the command again after you reconnect.
 
-On the phone, `localhost` means the phone itself, and the `10.0.2.2` rewrite
-only works on the emulator. Pick one of the two options below.
+### Over Wi-Fi instead
 
-### Option 1: over Wi-Fi
-
-Use your computer's address on your Wi-Fi network, for example
-`192.168.1.20`. On a Mac, run `ipconfig getifaddr en0` to find it.
+Without a cable, the phone needs your computer's address on your Wi-Fi network,
+for example `192.168.1.20`. On a Mac, run `ipconfig getifaddr en0` to find it.
 
 1. Set the URL in `android/app/build.gradle.kts`:
 
@@ -158,9 +179,9 @@ Use your computer's address on your Wi-Fi network, for example
    <domain includeSubdomains="false">192.168.1.20</domain>
    ```
 
-3. Start your server so it accepts connections from the network. The same
-   Vite caveat applies as on the emulator, so run it without the Vite dev
-   server:
+3. Start your server so it accepts connections from the network. Vite's
+   `127.0.0.1` address isn't reachable over Wi-Fi, so run your app without
+   the Vite dev server:
 
    ::: code-group
 
@@ -170,32 +191,11 @@ Use your computer's address on your Wi-Fi network, for example
    ```
 
    ```bash [Rails]
+   # Rails builds the assets when the Vite dev server isn't running.
    bin/rails server -b 0.0.0.0
    ```
 
    :::
-
-### Option 2: through the USB cable
-
-`adb reverse` forwards a port on the phone to the same port on your computer.
-`adb` comes with the Android SDK, in its `platform-tools` directory. Use the
-port your dev server listens on:
-
-```bash
-adb reverse tcp:8000 tcp:8000
-```
-
-Now `localhost:8000` on the phone reaches your computer. Keep the `localhost`
-URL, but turn off the emulator rewrite in
-`android/app/src/main/kotlin/dev/inertianative/app/Urls.kt`:
-
-```kotlin
-val base: String = BuildConfig.BASE_URL
-```
-
-The forward lasts until you unplug the phone, so run `adb reverse` again after
-you reconnect. The Vite caveat applies here too: if your page loads scripts
-from the Vite dev server, build the assets and run your app without it.
 
 ## Change the name, bundle ID, or URL
 
