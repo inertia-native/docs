@@ -45,20 +45,32 @@ Run this from your app's root, with your dev server running:
 npm run ios
 ```
 
-It builds the app into `ios/build`, picks the simulator that's already
-running or the newest iPhone, opens the Simulator app, then installs and
+It builds the app into `ios/build`, opens the Simulator app, then installs and
 launches your app. It warns you if your dev server doesn't answer.
 
-To pick a simulator, pass its name after `--`:
+It picks the simulator this way:
+
+- **One simulator is running**: it uses that one.
+- **Several are running**: it asks which one. Outside an interactive
+  terminal, for example in a script, it stops and lists them instead.
+- **None is running**: it asks which iPhone simulator to start, with the
+  newest one selected. Outside an interactive terminal, it starts the newest
+  iPhone.
+
+To pick a simulator yourself, pass its name or UDID after `--`:
 
 ```bash
-npm run ios -- --device "iPhone 16 Pro"
+npm run ios -- --device "iPhone 17 Pro"
 ```
 
-`xcrun simctl list devices available` lists the names you can use.
+| Option | What it does |
+| --- | --- |
+| `--device <name>` | The simulator to use, by name or UDID. It's started if needed. |
+| `--list` | List the running and available simulators, then exit. |
 
-You can also run from Xcode. Open `ios/App.xcodeproj`, choose a simulator in
-the run destination menu at the top of the window, and press **Run** (⌘R).
+You can also run from Xcode. Run `npx inertia-native open ios` to open
+`ios/App.xcodeproj`, choose a simulator in the run destination menu at the top
+of the window, and press **Run** (⌘R).
 
 The simulator shares your Mac's network, so `http://localhost:8000` or
 `http://localhost:3000` reaches your dev server without changes.
@@ -69,7 +81,7 @@ The simulator shares your Mac's network, so `http://localhost:8000` or
 these steps:
 
 1. Connect your iPhone to your Mac with a cable.
-2. Open `ios/App.xcodeproj` in Xcode.
+2. Open the project in Xcode with `npx inertia-native open ios`.
 3. Select the **App** target, open **Signing & Capabilities**, and choose your
    **Team**. The project ships without a team, so Xcode can't sign the app
    until you pick one. If Xcode says the bundle ID isn't available, change it

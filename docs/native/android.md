@@ -64,12 +64,20 @@ Run this from your app's root, with your dev server running:
 npm run android
 ```
 
-It uses the device that's already connected, or starts your first emulator
-and waits for it to boot. Then it builds and installs a debug build with
-Gradle, forwards your dev server's ports to the device, and launches your app.
-It warns you if your dev server doesn't answer.
+It builds and installs a debug build with Gradle, forwards your dev server's
+ports to the device, and launches your app. It warns you if your dev server
+doesn't answer.
 
-Pass options after `--`:
+It picks the device this way:
+
+- **One device or emulator is connected**: it uses that one.
+- **Several are connected**: it asks which one. Outside an interactive
+  terminal, for example in a script, it stops and lists them instead.
+- **None is connected**: it starts your emulator and waits for it to boot. If
+  you have several emulators, it asks which one to start, or stops and lists
+  them outside an interactive terminal.
+
+To pick one yourself, pass an option after `--`:
 
 ```bash
 npm run android -- --avd Pixel_9
@@ -77,8 +85,9 @@ npm run android -- --avd Pixel_9
 
 | Option | What it does |
 | --- | --- |
-| `--avd <name>` | The emulator to use, started if needed. `emulator -list-avds` prints the names. The `emulator` tool is in the Android SDK's `emulator` directory. |
-| `--device <serial>` | A connected device to use, by the serial that `adb devices` prints. Use it when more than one device is connected. |
+| `--avd <name>` | The emulator to use, by its AVD name. It's started if needed. |
+| `--device <serial>` | A connected device or running emulator to use, by its serial, such as `emulator-5554`. |
+| `--list` | List the connected devices and your emulators, then exit. |
 
 ### How the device reaches your computer
 
@@ -95,9 +104,11 @@ After that, `http://localhost:8000` in the app reaches your dev server, and so
 do the scripts that Vite serves at `http://127.0.0.1:5173`. The forward lasts
 until the emulator shuts down.
 
-Vite must listen on `127.0.0.1` for this to work, not on the IPv6 address
-`[::1]`. [Quick start](/guide/quick-start#_2-start-your-dev-server) shows the
-one-line Vite config change. `npm run android` warns you when it's missing.
+Vite must listen on `127.0.0.1` for this to work. When it listens on the IPv6
+address `[::1]`, the page loads its scripts from `http://[::1]:5173`, which
+the device can't reach. `init` offers to make the one-line Vite config change
+that [Quick start](/guide/quick-start#_2-start-your-dev-server) shows, and
+`npm run android` warns you when it's missing.
 
 Android blocks plain HTTP by default. In debug builds,
 `network_security_config.xml` allows it for `localhost`, `127.0.0.1`, and
@@ -105,13 +116,21 @@ Android blocks plain HTTP by default. In debug builds,
 
 ### Run from Android Studio
 
-You can also run from Android Studio. Open the `android/` directory, wait for
-Gradle to finish syncing, choose an emulator in the toolbar, and press
-**Run**.
+You can also run from Android Studio. Run this to open the `android/`
+directory in it:
 
-Android Studio doesn't forward ports. Once per emulator boot, either run
-`npm run android`, or forward the ports yourself with `adb`, which is in the
-Android SDK's `platform-tools` directory:
+```bash
+npx inertia-native open android
+```
+
+Wait for Gradle to finish syncing, choose an emulator in the toolbar, and
+press **Run**. On Linux, `open` needs Android Studio's `studio` or `studio.sh`
+launcher on your `PATH`; otherwise it prints the directory to open.
+
+Android Studio doesn't forward ports, so `open android` prints the `adb reverse`
+commands for your app's ports. Once per emulator boot, either run
+`npm run android`, or run those commands. `adb` is in the Android SDK's
+`platform-tools` directory:
 
 ::: code-group
 
@@ -156,9 +175,10 @@ forwarding. Turn on USB debugging first:
 3. Connect the phone with a cable and accept the prompt on the phone.
 
 Then run `npm run android`. It installs the app on the phone and forwards the
-ports, so `localhost` works without changes. If an emulator is running too,
-pick the phone with `--device` and the serial from `adb devices`. Unplugging
-the phone ends the forward, so run the command again after you reconnect.
+ports, so `localhost` works without changes. If an emulator is running too, it
+asks which one to use. You can also pick the phone with `--device` and the
+serial that `npm run android -- --list` prints. Unplugging the phone ends the
+forward, so run the command again after you reconnect.
 
 ### Over Wi-Fi instead
 

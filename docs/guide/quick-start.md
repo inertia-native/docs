@@ -42,9 +42,12 @@ It asks a few questions. Press Enter to accept each default:
   The default `com.example.…` is fine for trying things out.
 - **Dev server URL**: the address the app loads. Use the same URL you open in
   your browser during development.
+- **Vite host**, if you build for Android: whether `init` may change one line
+  of your Vite config so that Android can load your scripts.
+  [Step 2](#_2-start-your-dev-server) explains why.
 
-Then it changes four things in your project. The output looks like this, with
-the defaults accepted:
+Then it changes your project. The output looks like this, with the defaults
+accepted:
 
 ::: code-group
 
@@ -55,9 +58,11 @@ $ npx inertia-native init
 ? App name (Acme Shop) ›
 ? Bundle ID (com.example.acmeshop) ›
 ? Dev server URL (http://localhost:8000) ›
+? Set server.host to 127.0.0.1 in vite.config.ts, so Android can load scripts from Vite? (Y/n) ›
 › npm install inertia-native
 ✓ Added inertia-native to package.json (npm)
 ✓ Patched resources/js/app.tsx
+✓ Set server.host to 127.0.0.1 in vite.config.ts
 ✓ Created ios/ and android/
 ✓ Added "ios" and "android" scripts to package.json
 
@@ -71,9 +76,11 @@ $ npx inertia-native init
 ? App name (Acme Shop) ›
 ? Bundle ID (com.example.acmeshop) ›
 ? Dev server URL (http://localhost:3000) ›
+? Set server.host to 127.0.0.1 in vite.config.ts, so Android can load scripts from Vite? (Y/n) ›
 › npm install inertia-native
 ✓ Added inertia-native to package.json (npm)
 ✓ Patched app/javascript/entrypoints/inertia.tsx
+✓ Set server.host to 127.0.0.1 in vite.config.ts
 ✓ Created ios/ and android/
 ✓ Added "ios" and "android" scripts to package.json
 
@@ -96,9 +103,10 @@ URL at the prompt.
 
 ## 2. Start your dev server
 
-If you plan to run on Android, change one line of your Vite config first. The
-Laravel and Rails starter kits serve scripts from `http://[::1]:5173`, an IPv6
-address that Android can't reach. Make Vite listen on `127.0.0.1` instead:
+If you build for Android, `init` asked to change one line of your Vite config.
+The Laravel and Rails starter kits serve scripts from `http://[::1]:5173`, an
+IPv6 address that Android can't reach. The change makes Vite listen on
+`127.0.0.1` instead:
 
 ::: code-group
 
@@ -123,8 +131,13 @@ export default defineConfig(({ command }) => ({
 
 :::
 
-`npm run android` checks for this and prints the line to add if it's missing.
-iOS works either way.
+If you answered no, or `init` couldn't change your config safely, make the
+change by hand. `init` printed the line to add, and `npm run android` checks
+for it and prints the line again if it's missing. iOS works either way.
+
+Rails apps on `vite_rails` (the ones with `config/vite.json`) don't need this
+change, so `init` doesn't ask. Rails serves their scripts from its own
+address.
 
 Now start your app the way you always do:
 
@@ -152,12 +165,22 @@ npm run ios
 npm run android
 ```
 
-`npm run ios` builds the app, starts an iPhone simulator, installs the app,
-and opens it. `npm run android` builds the app, starts your first emulator if
-no device is connected, installs the app, and opens it. On Android it also
-runs `adb reverse` for your dev server's ports, so `localhost` on the device
-reaches your computer. The first build downloads Hotwire Native and the other
-dependencies, so it takes longer than the ones after it.
+`npm run ios` builds the app, installs it on the simulator that's running, and
+opens it. `npm run android` does the same on the emulator or phone that's
+connected. On Android it also runs `adb reverse` for your dev server's ports,
+so `localhost` on the device reaches your computer. The first build downloads
+Hotwire Native and the other dependencies, so it takes longer than the ones
+after it.
+
+If nothing is running, `npm run ios` asks which iPhone simulator to start and
+selects the newest one. `npm run android` starts your emulator, or asks which
+one when you have several. If more than one simulator or device is running,
+it asks which one to use. To see them all, add `--list`:
+
+```bash
+npm run ios -- --list
+npm run android -- --list
+```
 
 You should see your home page on a native screen. Try these:
 
@@ -195,8 +218,8 @@ shows how to hide them, close a modal after a form, and add a native button.
 
 ## What `init` did
 
-`init` made four changes. You can make them by hand instead if you prefer to
-see each step.
+`init` made up to five changes. You can make them by hand instead if you
+prefer to see each step.
 
 ### The package and two lines of JavaScript
 
@@ -238,16 +261,30 @@ nothing, so your website keeps working as before. The
 If `init` can't find your entrypoint, or finds a file it can't safely change,
 it prints these two lines for you to add yourself.
 
+### The Vite host
+
+If you build for Android and answered yes, `init` set `server.host` to
+`127.0.0.1` in your Vite config, as shown in
+[step 2](#_2-start-your-dev-server). It adds the line to your `server` options,
+or adds `server` if your config doesn't have it, and keeps your quotes and
+indentation.
+
+`init` leaves the file alone when it already sets `server.host`, or when it
+can't tell where the line goes, for example when `defineConfig` gets a function
+with a body. Then it prints the line for you to add.
+
 ### The native projects
 
 `init` created two native projects next to your app code:
 
-- `ios/`: an Xcode project. Without the script, open `ios/App.xcodeproj` in
-  Xcode, pick a simulator at the top of the window, and press **Run**.
-- `android/`: a Gradle project. Without the script, open the `android/`
-  directory in Android Studio, pick an emulator, and press **Run**. You also
-  need to [forward your dev server's ports](/native/android#run-from-android-studio)
-  once per emulator boot.
+- `ios/`: an Xcode project. To run it from Xcode instead of the script, run
+  `npx inertia-native open ios`, pick a simulator at the top of the window,
+  and press **Run**.
+- `android/`: a Gradle project. To run it from Android Studio instead of the
+  script, run `npx inertia-native open android`, pick an emulator, and press
+  **Run**. You also need to
+  [forward your dev server's ports](/native/android#run-from-android-studio)
+  once per emulator boot. `open android` prints the commands for it.
 
 Both are small and readable. [iOS](/native/ios) and [Android](/native/android)
 explain each file and how to change the name, bundle ID, and URL later.
@@ -286,7 +323,7 @@ npx inertia-native init ios --name "Acme Shop" --bundle-id com.acme.shop --url h
 | `--entrypoint` | Path to your Inertia entrypoint, if `init` picks the wrong file. |
 | `--skip-install` | Don't add the npm package. |
 | `--force` | Replace existing `ios/` and `android/` directories. This deletes changes you made in them. |
-| `--yes` | Accept every default without asking. |
+| `--yes` | Accept every default without asking, including the Vite host change for Android. |
 
 `init` only asks questions in an interactive terminal. Elsewhere it uses the
 flags and defaults.
