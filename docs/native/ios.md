@@ -93,9 +93,9 @@ The app's `Info.plist` sets `NSAllowsLocalNetworking`, which lets iOS load
 plain HTTP from local network addresses like this one.
 
 Your server must accept connections from the network, and the page's scripts
-must come from an address the phone can reach. A setup that loads scripts from
-the Vite dev server at `localhost` leaves the page blank on the phone, and
-Laravel works that way. The reliable option is to run your app without the
+must come from an address the phone can reach. The Laravel and Rails starter
+kits load scripts from the Vite dev server at a local address, so the page
+won't load on the phone. The reliable option is to run your app without the
 Vite dev server:
 
 ::: code-group
