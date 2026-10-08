@@ -43,48 +43,52 @@ It asks a few questions. Press Enter to accept each default:
 - **Dev server URL**: the address the app loads. Use the same URL you open in
   your browser during development.
 
-Then it changes four things in your project. The output looks like this:
+Then it changes four things in your project. The output looks like this, with
+the defaults accepted:
 
 ::: code-group
 
 ```text [Laravel]
 $ npx inertia-native init
-? Platforms › both
+? Platforms [both/ios/android] (both) ›
 ✓ Found entrypoint resources/js/app.tsx
-? App name › Acme Shop
-? Bundle ID › com.example.acmeshop
-? Dev server URL › http://localhost:8000
+? App name (Acme Shop) ›
+? Bundle ID (com.example.acmeshop) ›
+? Dev server URL (http://localhost:8000) ›
+› npm install inertia-native
 ✓ Added inertia-native to package.json (npm)
 ✓ Patched resources/js/app.tsx
 ✓ Created ios/ and android/
 ✓ Added "ios" and "android" scripts to package.json
 
-Next: start your dev server (composer run dev), then run: npm run ios
+Next: start your dev server (composer run dev), then run: npm run ios (or npm run android)
 ```
 
 ```text [Rails]
 $ npx inertia-native init
-? Platforms › both
-✓ Found entrypoint app/frontend/entrypoints/inertia.tsx
-? App name › Acme Shop
-? Bundle ID › com.example.acmeshop
-? Dev server URL › http://localhost:3000
+? Platforms [both/ios/android] (both) ›
+✓ Found entrypoint app/javascript/entrypoints/inertia.tsx
+? App name (Acme Shop) ›
+? Bundle ID (com.example.acmeshop) ›
+? Dev server URL (http://localhost:3000) ›
+› npm install inertia-native
 ✓ Added inertia-native to package.json (npm)
-✓ Patched app/frontend/entrypoints/inertia.tsx
+✓ Patched app/javascript/entrypoints/inertia.tsx
 ✓ Created ios/ and android/
 ✓ Added "ios" and "android" scripts to package.json
 
-Next: start your dev server (bin/dev), then run: npm run ios
+Next: start your dev server (bin/dev), then run: npm run ios (or npm run android)
 ```
 
 :::
-
-<!-- TODO: re-check the sample output against the released CLI -->
 
 `init` finds your Inertia entrypoint by looking for `createInertiaApp(` in the
 usual places. It picks `http://localhost:8000` when it finds `artisan` and
 `http://localhost:3000` otherwise. If your app runs somewhere else, type that
 URL at the prompt.
+
+`init` uses the package manager your lockfile belongs to, so its hints may say
+`pnpm run ios` or `yarn run ios` instead of `npm run ios`.
 
 `init` is safe to run again: it skips anything that's already done. See
 [What `init` did](#what-init-did) for the details, or
@@ -92,7 +96,37 @@ URL at the prompt.
 
 ## 2. Start your dev server
 
-Start your app the way you always do:
+If you plan to run on Android, change one line of your Vite config first. The
+Laravel and Rails starter kits serve scripts from `http://[::1]:5173`, an IPv6
+address that Android can't reach. Make Vite listen on `127.0.0.1` instead:
+
+::: code-group
+
+```ts [Laravel]
+// vite.config.ts
+export default defineConfig({
+    // …
+    server: {
+        host: '127.0.0.1', // [!code ++]
+        // …
+    },
+})
+```
+
+```ts [Rails]
+// vite.config.ts
+export default defineConfig(({ command }) => ({
+  server: { host: "127.0.0.1" }, // [!code ++]
+  // …
+}))
+```
+
+:::
+
+`npm run android` checks for this and prints the line to add if it's missing.
+iOS works either way.
+
+Now start your app the way you always do:
 
 ::: code-group
 
@@ -120,9 +154,10 @@ npm run android
 
 `npm run ios` builds the app, starts an iPhone simulator, installs the app,
 and opens it. `npm run android` builds the app, starts your first emulator if
-none is running, installs the app, and opens it. The first build downloads
-Hotwire Native and the other dependencies, so it takes longer than the ones
-after it.
+no device is connected, installs the app, and opens it. On Android it also
+runs `adb reverse` for your dev server's ports, so `localhost` on the device
+reaches your computer. The first build downloads Hotwire Native and the other
+dependencies, so it takes longer than the ones after it.
 
 You should see your home page on a native screen. Try these:
 
@@ -132,11 +167,21 @@ You should see your home page on a native screen. Try these:
   screen that slides up from the bottom.
 - Pull the page down to reload it.
 
-::: warning Blank screen on the Android emulator?
-Inside the emulator, `localhost` means the emulator itself. The app already
-handles that for your URL, but if your page loads scripts from the Vite dev
-server at a `localhost` address, the emulator can't reach them. See
-[Blank screen on the emulator](/native/android#blank-screen-on-the-emulator).
+If Android shows **Error loading page**, see
+[the checklist](/native/android#error-loading-page-on-the-emulator).
+
+::: tip Laravel starter kit: stuck on "Email verification"?
+The starter kit asks new users to verify their email. In development it
+doesn't send the email: it writes the link to `storage/logs/laravel.log`, and
+the app has no address bar to open it. Use an account that's already verified
+instead. `php artisan db:seed` creates `test@example.com` with the password
+`password`. To verify an account you've already registered, run this and then
+pull down to reload the page:
+
+```bash
+php artisan tinker --execute="App\Models\User::where('email', 'you@example.com')->update(['email_verified_at' => now()])"
+```
+
 :::
 
 To run on your own phone, see [iOS](/native/ios#run-on-your-iphone) and
@@ -173,7 +218,7 @@ createInertiaApp({
 ```
 
 ```js [Rails]
-// app/frontend/entrypoints/inertia.tsx (or inertia.ts, inertia.js)
+// app/javascript/entrypoints/inertia.tsx (or app/frontend/entrypoints/…)
 import { createInertiaApp } from '@inertiajs/react'
 import { initInertiaNative } from 'inertia-native' // [!code ++]
 
@@ -200,7 +245,9 @@ it prints these two lines for you to add yourself.
 - `ios/`: an Xcode project. Without the script, open `ios/App.xcodeproj` in
   Xcode, pick a simulator at the top of the window, and press **Run**.
 - `android/`: a Gradle project. Without the script, open the `android/`
-  directory in Android Studio, pick an emulator, and press **Run**.
+  directory in Android Studio, pick an emulator, and press **Run**. You also
+  need to [forward your dev server's ports](/native/android#run-from-android-studio)
+  once per emulator boot.
 
 Both are small and readable. [iOS](/native/ios) and [Android](/native/android)
 explain each file and how to change the name, bundle ID, and URL later.
