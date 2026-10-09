@@ -1,12 +1,7 @@
 <script setup lang="ts">
 /**
- * A phone frame around a screenshot or a screen recording.
- *
- * To swap a screenshot for a recording, change `src` to the video file:
- *   <Phone src="/landing/ios-push.webp" ... />  →  <Phone src="/landing/ios-push.mp4" ... />
- * Videos play muted, looped and inline; they stay paused for visitors who
- * prefer reduced motion. Media should match the device aspect ratio
- * (iOS 1206×2622, Android 1080×2400, or any size with the same ratio).
+ * A phone frame around a screenshot or a screen recording (.mp4, muted and looped).
+ * Media must have the device's aspect ratio: iOS 1206×2622, Android 1080×2400.
  */
 import { computed, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
@@ -16,8 +11,6 @@ const props = withDefaults(
     src: string
     alt: string
     platform?: 'ios' | 'android'
-    /** Still frame shown until a video can play. */
-    poster?: string
     /** Load right away (above the fold). */
     eager?: boolean
   }>(),
@@ -52,7 +45,6 @@ onMounted(() => {
           v-if="isVideo"
           ref="video"
           :src="withBase(src)"
-          :poster="poster && withBase(poster)"
           :aria-label="alt"
           muted
           loop
@@ -116,7 +108,6 @@ onMounted(() => {
     0 60px 90px -40px rgba(0, 0, 0, 0.55);
 }
 
-/* Side buttons */
 .body::before,
 .body::after {
   content: '';
