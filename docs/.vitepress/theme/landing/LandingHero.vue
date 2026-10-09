@@ -34,7 +34,7 @@ import CopyCommand from './CopyCommand.vue'
       </div>
 
       <figure class="devices">
-        <div class="ios">
+        <div class="dev-ios">
           <Phone
             platform="ios"
             src="/landing/ios-push.webp"
@@ -44,7 +44,7 @@ import CopyCommand from './CopyCommand.vue'
           <div class="mark native" aria-hidden="true"><span>Native navigation</span></div>
           <div class="mark web" aria-hidden="true"><span>Your Inertia page</span></div>
         </div>
-        <div class="android">
+        <div class="dev-android">
           <Phone
             platform="android"
             src="/landing/android-push.webp"
@@ -181,25 +181,25 @@ h1 {
   margin: 0;
 }
 
-.ios,
-.android {
+.dev-ios,
+.dev-android {
   flex: none;
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 /* iOS sits behind and higher; Android in front, so both back buttons show. */
-.ios {
+.dev-ios {
   position: relative;
   z-index: 1;
   width: var(--phone);
 }
 
-.android {
+.dev-android {
   position: relative;
   z-index: 2;
   width: calc(var(--phone) * 0.95);
-  margin-top: calc(var(--phone) * 0.26);
-  margin-left: calc(var(--phone) * -0.16);
+  margin-top: calc(var(--phone) * 0.52);
+  margin-left: calc(var(--phone) * -0.32);
   animation-delay: 0.12s;
 }
 
@@ -213,7 +213,6 @@ figcaption {
   color: var(--vp-c-text-2);
 }
 
-/* Brackets that say which part of the screen is native and which is yours. */
 .mark {
   display: none;
 }
