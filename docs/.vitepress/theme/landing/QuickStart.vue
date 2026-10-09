@@ -3,9 +3,8 @@
  * The default slot is the entrypoint diff, written as a code block in
  * index.md so it gets the site's syntax highlighting.
  *
- * Terminal output follows the `npx inertia-native init` spec (INIT-CLI.md):
- * the dev server URL and next-step command depend on whether `artisan`
- * (Laravel) or `bin/dev` (Rails) exists.
+ * The terminal output mirrors `npx inertia-native init`. The dev server URL,
+ * the next-step command and the Vite prompt depend on the stack.
  */
 import { computed, ref } from 'vue'
 import CopyCommand from './CopyCommand.vue'
@@ -16,12 +15,14 @@ const stacks = {
     entry: 'resources/js/app.tsx',
     url: 'http://localhost:8000',
     dev: 'composer run dev',
+    vite: true,
   },
   rails: {
     label: 'Rails',
     entry: 'app/frontend/entrypoints/inertia.tsx',
     url: 'http://localhost:3000',
     dev: 'bin/dev',
+    vite: false,
   },
 } as const
 
@@ -74,7 +75,7 @@ const s = computed(() => stacks[current.value])
             </div>
             <p class="l-text">
               Builds the app and opens it in the iOS Simulator or an Android
-              emulator. You need Xcode for iOS and the Android SDK for Android.
+              emulator. You need Xcode for iOS, and the Android SDK and a JDK for Android.
             </p>
           </li>
         </ol>
@@ -82,18 +83,20 @@ const s = computed(() => stacks[current.value])
         <div class="output">
           <div class="terminal" role="region" aria-label="Output of npx inertia-native init">
             <div class="bar" aria-hidden="true"><i /><i /><i /></div>
-            <pre><code><span class="dim">$</span> npx inertia-native init
+            <pre tabindex="0"><code><span class="dim">$</span> npx inertia-native init
 <span class="ask">?</span> Platforms <span class="dim">›</span> <b>both</b>
 <span class="ok">✓</span> Found entrypoint {{ s.entry }}
 <span class="ask">?</span> App name <span class="dim">›</span> <b>Acme Shop</b>
 <span class="ask">?</span> Bundle ID <span class="dim">›</span> <b>com.example.acmeshop</b>
 <span class="ask">?</span> Dev server URL <span class="dim">›</span> <b>{{ s.url }}</b>
-<span class="ok">✓</span> Added inertia-native to package.json (npm)
+<template v-if="s.vite"><span class="ask">?</span> Set server.host to 127.0.0.1 in vite.config.ts, so Android can load scripts from Vite? <span class="dim">(Y/n)</span>
+</template><span class="ok">✓</span> Added inertia-native to package.json (npm)
 <span class="ok">✓</span> Patched {{ s.entry }}
-<span class="ok">✓</span> Created ios/ and android/
+<template v-if="s.vite"><span class="ok">✓</span> Set server.host to 127.0.0.1 in vite.config.ts
+</template><span class="ok">✓</span> Created ios/ and android/
 <span class="ok">✓</span> Added "ios" and "android" scripts to package.json
 
-<b>Next:</b> start your dev server ({{ s.dev }}), then run: <b>npm run ios</b></code></pre>
+<b>Next:</b> start your dev server ({{ s.dev }}), then run: <b>npm run ios</b> (or npm run android)</code></pre>
           </div>
 
           <div class="diff">
