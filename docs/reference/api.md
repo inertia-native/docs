@@ -104,4 +104,4 @@ The package installs and reads these on `window`:
 | --- | --- | --- |
 | `window.Turbo` | `initInertiaNative()` | Shim that `turbo.js` drives for navigation. Internal. |
 | `window.HotwireNative.web` | `initInertiaNative()` | Web side of the bridge (`send`, `supportsComponent`, `removeCallback`, …). The name is Hotwire Native's bridge protocol. |
-| `window.webkit.messageHandlers.turbo` | WKWebView (iOS) | Feature-detect that the app runs inside the native shell. |
+| `window.webkit.messageHandlers.turbo` | WKWebView (iOS) | Hotwire Native's message channel on iOS. Android has no `window.webkit`, so don't use it to detect the app: check the user agent for `Hotwire Native` instead (see [Feel native](/guide/feel-native#tell-the-app-apart-from-a-browser)). |
