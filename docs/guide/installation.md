@@ -48,9 +48,8 @@ See the [API](/reference/api) for every option.
 
 ### Server-side rendering
 
-From version 1.1, `initInertiaNative()` does nothing on the server, where
-there's no `window`. In version 1.0, guard the call:
-<!-- TODO: confirm version -->
+`initInertiaNative()` uses `window`. If your entrypoint also runs on the
+server, guard the call:
 
 ```js
 if (typeof window !== 'undefined') initInertiaNative()

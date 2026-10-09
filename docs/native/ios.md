@@ -124,7 +124,6 @@ bin/rails server -b 0.0.0.0
 
 :::
 
-
 ## Change the name, bundle ID, or URL
 
 `init` wrote your answers into a few places. Change them there:

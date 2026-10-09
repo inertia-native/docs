@@ -79,22 +79,16 @@ native features where your users benefit from them.
 
 ## Does server-side rendering work?
 
-Yes, for navigation. From version 1.1, `initInertiaNative()` does nothing when
-there's no `window`, so an entrypoint that also runs on the server works
-unchanged.
-<!-- TODO: confirm version -->
-
-In version 1.0, wrap the call yourself:
+Yes, with a guard. `initInertiaNative()` uses `window`, so if your entrypoint
+also runs on the server, call it only in the browser:
 
 ```js
 if (typeof window !== 'undefined') initInertiaNative()
 ```
 
-`useBridgeComponent` reads `window` while a component renders, in all three
-framework bindings. A page that uses a bridge component fails to render on the
-server.
-
-<!-- TODO: update once useBridgeComponent is SSR-safe (react.js useState initializer, vue.js ref(), svelte.js readable() all read window during render) -->
+Bridge components don't render on the server yet. `useBridgeComponent` reads
+`window` while a component renders, in all three framework bindings, so a page
+that uses a bridge component fails to render on the server.
 
 ## Which Inertia versions does it support?
 
