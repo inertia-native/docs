@@ -20,8 +20,6 @@ You need an Inertia app and the tools for the platforms you want to build:
 
 You can skip the tools for a platform you don't build.
 
-<!-- TODO: confirm the minimum Android Studio version for AGP 9.2.1 -->
-
 ## 1. Run `init`
 
 Run this in your app's root, the directory with `package.json`:
@@ -29,8 +27,6 @@ Run this in your app's root, the directory with `package.json`:
 ```bash
 npx inertia-native init
 ```
-
-<!-- TODO: confirm the first inertia-native version that ships `init` and `run` -->
 
 It asks a few questions. Press Enter to accept each default:
 

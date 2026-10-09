@@ -14,8 +14,6 @@ You need Android Studio to build and run the app:
 - The app runs on Android 9 (API level 28) and later.
 - Hotwire Native Android 1.3.1. Gradle downloads it on the first build.
 
-<!-- TODO: confirm the minimum Android Studio version for AGP 9.2.1 / Gradle 9.4.1 -->
-
 ## What `init` creates
 
 The project is plain Kotlin with no generated code, so you can read and change

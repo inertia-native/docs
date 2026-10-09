@@ -405,8 +405,6 @@ new post, answer with `/refresh_historical_location` instead.
 [Historical locations](/guide/navigation#historical-locations) lists all three
 paths and has a ready-made Rails helper.
 
-<!-- TODO: confirm on Android that recede from a modal pops only the modal when the screen under it isn't the first one. NavigatorRule routes the modal result's POP again in the main stack (hotwire-native-android 1.3.1, NavigatorRule.kt newPresentation). -->
-
 ## Add a native button
 
 A native button sits in the navigation bar, next to the title, where native

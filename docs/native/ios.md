@@ -124,8 +124,6 @@ bin/rails server -b 0.0.0.0
 
 :::
 
-<!-- TODO: document a Vite dev server setup that keeps hot reload on a real device (server.host + server.hmr.host, Vite CORS) after testing it -->
-<!-- TODO: confirm whether iOS asks for Local Network permission when the app loads a LAN dev server -->
 
 ## Change the name, bundle ID, or URL
 
