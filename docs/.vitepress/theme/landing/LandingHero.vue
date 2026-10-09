@@ -29,7 +29,7 @@ import CopyCommand from './CopyCommand.vue'
         </div>
         <CopyCommand class="install" command="npx inertia-native init" />
         <p class="stack">
-          React, Vue or Svelte. Laravel, Rails or any other Inertia backend.
+          Inertia 3 with React, Vue or Svelte. Laravel, Rails or any other backend.
         </p>
       </div>
 
