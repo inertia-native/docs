@@ -22,9 +22,9 @@ Hotwire project.
 
 ## How it works
 
-Hotwire Native was built for Turbo, and it expects to find Turbo on every page.
-This package stands in for Turbo and translates its messages to Inertia's
-router. When Inertia visits a new page, the native app opens a new screen for
+Hotwire Native was built for Turbo, the page-navigation library that ships
+with Rails, and it expects to find Turbo on every page. This package stands in
+for Turbo and translates its messages to Inertia's router. When Inertia visits a new page, the native app opens a new screen for
 it. The package also lets your pages use bridge components, which draw native
 UI such as buttons in the navigation bar.
 

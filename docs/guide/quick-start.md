@@ -168,8 +168,8 @@ so `localhost` on the device reaches your computer. The first build downloads
 Hotwire Native and the other dependencies, so it takes longer than the ones
 after it.
 
-If nothing is running, `npm run ios` asks which iPhone simulator to start and
-selects the newest one. `npm run android` starts your emulator, or asks which
+If nothing is running, `npm run ios` asks which iPhone simulator to start,
+with the newest one as the default. `npm run android` starts your emulator, or asks which
 one when you have several. If more than one simulator or device is running,
 it asks which one to use. To see them all, add `--list`:
 
