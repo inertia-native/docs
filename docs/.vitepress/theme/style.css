@@ -1,0 +1,167 @@
+/* Schibsted Grotesk, SIL Open Font License 1.1 (see fonts/OFL.txt). Latin subset. */
+@font-face {
+  font-family: 'Schibsted Grotesk';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('./fonts/schibsted-grotesk-latin.woff2') format('woff2');
+}
+
+/* Brand: a violet in the Inertia family. Buttons use brand-3 with white text. */
+:root {
+  --vp-c-brand-1: #5332c4;
+  --vp-c-brand-2: #5f43d6;
+  --vp-c-brand-3: #6b4fe0;
+  --vp-c-brand-soft: rgba(107, 79, 224, 0.14);
+}
+
+.dark {
+  --vp-c-brand-1: #b3a4ff;
+  --vp-c-brand-2: #7a62ee;
+  --vp-c-brand-3: #6248dc;
+  --vp-c-brand-soft: rgba(122, 98, 238, 0.16);
+}
+
+/*
+ * Home page. Two colours carry meaning across the page:
+ * --l-web is your Inertia app (the web side), --l-native is the phone.
+ */
+.landing {
+  --l-display: 'Schibsted Grotesk', var(--vp-font-family-base);
+  --l-web: var(--vp-c-brand-1);
+  --l-web-soft: var(--vp-c-brand-soft);
+  --l-native: #b45309;
+  --l-native-soft: rgba(217, 119, 6, 0.12);
+  --l-wrap: 1152px;
+  --l-gutter: 24px;
+
+  overflow-x: clip;
+}
+
+.dark .landing {
+  --l-native: #f5b544;
+  --l-native-soft: rgba(245, 181, 68, 0.12);
+}
+
+/* The closing section has its own footer; drop the default home margin. */
+.VPHome:has(.landing) {
+  margin-bottom: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .landing {
+    --l-gutter: 48px;
+  }
+}
+
+@media (min-width: 960px) {
+  .landing {
+    --l-gutter: 64px;
+  }
+}
+
+.landing .l-section {
+  padding: 80px var(--l-gutter);
+}
+
+.landing .l-section.alt {
+  background: var(--vp-c-bg-alt);
+}
+
+@media (min-width: 960px) {
+  .landing .l-section {
+    padding-top: 112px;
+    padding-bottom: 112px;
+  }
+}
+
+.landing .l-wrap {
+  max-width: var(--l-wrap);
+  margin: 0 auto;
+}
+
+.landing .l-h2 {
+  font-family: var(--l-display);
+  font-size: clamp(30px, 4.2vw, 44px);
+  font-weight: 760;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--vp-c-text-1);
+  text-wrap: balance;
+}
+
+.landing .l-h3 {
+  font-family: var(--l-display);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--vp-c-text-1);
+}
+
+.landing .l-lede {
+  margin-top: 16px;
+  max-width: 58ch;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+  text-wrap: pretty;
+}
+
+.landing .l-text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+  text-wrap: pretty;
+}
+
+.landing :not(pre) > code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: var(--vp-code-bg);
+  color: var(--vp-code-color);
+}
+
+.landing .l-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.landing .l-link::after {
+  content: '\2192';
+  transition: transform 0.2s;
+}
+
+.landing .l-link:hover {
+  color: var(--vp-c-brand-2);
+}
+
+.landing .l-link:hover::after {
+  transform: translateX(3px);
+}
+
+/* Code blocks rendered from index.md inside landing components. */
+.landing .l-code div[class*='language-'] {
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.landing .l-code div[class*='language-'] pre {
+  padding: 16px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing *,
+  .landing *::before,
+  .landing *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
