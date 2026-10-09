@@ -10,8 +10,8 @@ hero:
       text: Get started
       link: /guide/introduction
     - theme: alt
-      text: Installation
-      link: /guide/installation
+      text: Quick start
+      link: /guide/quick-start
     - theme: alt
       text: GitHub
       link: https://github.com/inertia-native/inertia-native
