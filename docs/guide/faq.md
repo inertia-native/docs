@@ -94,7 +94,7 @@ that uses a bridge component fails to render on the server.
 
 Inertia Native needs Inertia 3 (`@inertiajs/core` 3.0 or later) with React,
 Vue, or Svelte. Version 1.0 dropped support for Inertia 2. See
-[Installation](/guide/installation#requirements) for the full list.
+[Manual installation](/guide/installation#requirements) for the full list.
 
 ## Does it work offline? Does it support push notifications?
 

@@ -1,4 +1,4 @@
-# Installation
+# Manual installation
 
 Most apps should start with `npx inertia-native init`, which installs the
 package, sets it up, and creates the native apps. The
